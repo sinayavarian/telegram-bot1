@@ -1,0 +1,12 @@
+
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned
+
+python -m venv venv
+py -m venv venv
+
+venv/Scripts/activate
+import pprint
+pprint.pprint(message.chat.__dict__,width=4)
