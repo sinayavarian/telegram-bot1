@@ -5,7 +5,7 @@ import json
 from telebot import apihelper
 import logging
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
-
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 # Dictionary to store user profiles
 user_profiles = {}
 
@@ -63,22 +63,47 @@ def send_welcome(message):
 #     bot.reply_to(message, f"اطلاعات شما ثبت شد:\nنام: {user_profiles[chat_id]['name']}\nسن: {age}")
 
 
-@bot.message_handler(commands=['start'])
-def create_button(message):
+# @bot.message_handler(commands=['start'])
+# def create_button(message):
 
-    markup = ReplyKeyboardMarkup(resize_keyboard=True,input_field_placeholder="choose your option")
-    markup.add(KeyboardButton('Help'),KeyboardButton('About'))
+#     markup = ReplyKeyboardMarkup(resize_keyboard=True,input_field_placeholder="choose your option")
+#     markup.add(KeyboardButton('Help'),KeyboardButton('About'))
     
+#     # display this markup:
+ 
+#     bot.send_message(message.chat.id, """Hi! Welcome!""", reply_markup=markup)
+
+# @bot.message_handler(func= lambda message : message.text == "Help")
+# def send_help(message):
+#     bot.send_message(message.chat.id, "It is your Help you want!")
+
+# @bot.message_handler(func= lambda message : message.text == "About")
+# def send_about(message):
+#     bot.send_message(message.chat.id, "It is your About you want!")
+
+@bot.message_handler(commands=['start'])
+def create_inline_button(message):
+
+    markup = InlineKeyboardMarkup()
+    google_button =InlineKeyboardButton("google",url="https://google.com")
+    mysite_button =InlineKeyboardButton("My site",url="https://yavarian.com")
+    test_button = InlineKeyboardButton("test", callback_data="test")
+    markup.add(google_button,mysite_button)
+    markup.add(test_button)
     # display this markup:
  
     bot.send_message(message.chat.id, """Hi! Welcome!""", reply_markup=markup)
 
-@bot.message_handler(func= lambda message : message.text == "Help")
-def send_help(message):
-    bot.send_message(message.chat.id, "It is your Help you want!")
+@bot.callback_query_handler(func= lambda call:True)
+def reply_call(call):
+    if call.data =="test":
+        bot.answer_callback_query(call.id, "click on test",show_alert=True)
+# @bot.message_handler(func= lambda message : message.text == "Help")
+# def send_help(message):
+#     bot.send_message(message.chat.id, "It is your Help you want!")
 
-@bot.message_handler(func= lambda message : message.text == "About")
-def send_about(message):
-    bot.send_message(message.chat.id, "It is your About you want!")
+# @bot.message_handler(func= lambda message : message.text == "About")
+# def send_about(message):
+#     bot.send_message(message.chat.id, "It is your About you want!")
 
 bot.infinity_polling()
