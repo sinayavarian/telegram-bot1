@@ -29,7 +29,12 @@ def send_welcome(message):
 # """)
     bot.send_message(message.chat.id, json.dumps(message.chat.__dict__, indent=4, ensure_ascii=False))
 
-
+@bot.message_handler(commands=['dorood'])
+def send_welcome(message):
+    bot.send_message(message.chat.id, """Dorood""")
+@bot.message_handler(commands=['author'])
+def send_author(message):
+    bot.send_message(message.chat.id, """the author is Sina Yavarian""")
 
 # @bot.middleware_handler(update_types=['message'])
 # def modify_message(bot_instance, message):
@@ -113,9 +118,14 @@ def reply_call(call):
 
 @bot.message_handler(commands=['send_photo'])
 def send_photo(message):
-    photo = open('./test/file/test.jpg', 'rb')
+    #photo = open('./test/file/test.jpg', 'rb')
     bot.send_chat_action(message.chat.id, action="upload_photo")
-    bot.send_photo(message.chat.id, photo)
+    bot.send_photo(message.chat.id, "AgACAgQAAxkBAAOJZ0PjkTSelcko50mEM-u-JFOG384AAnjHMRuCriBSR-KX17Fv4PcBAAMCAAN4AAM2BA")
+
+@bot.message_handler(content_types=["document", "video","photo","voice","audio"])
+def get_id(message)    :
+    logger.info(message.__dict__)
+
 # @bot.message_handler(func= lambda message : message.text == "Help")
 # def send_help(message):
 #     bot.send_message(message.chat.id, "It is your Help you want!")
