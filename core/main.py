@@ -87,17 +87,35 @@ def create_inline_button(message):
     markup = InlineKeyboardMarkup()
     google_button =InlineKeyboardButton("google",url="https://google.com")
     mysite_button =InlineKeyboardButton("My site",url="https://yavarian.com")
-    test_button = InlineKeyboardButton("test", callback_data="test")
+    step2_button = InlineKeyboardButton("step2", callback_data="step2")
     markup.add(google_button,mysite_button)
-    markup.add(test_button)
+    markup.add(step2_button)
     # display this markup:
  
-    bot.send_message(message.chat.id, """Hi! Welcome!""", reply_markup=markup)
+    bot.send_message(message.chat.id, """Hi! Welcome!""",reply_markup=markup)
 
 @bot.callback_query_handler(func= lambda call:True)
 def reply_call(call):
-    if call.data =="test":
-        bot.answer_callback_query(call.id, "click on test",show_alert=True)
+    #logger.debug(call.__dict__)
+    if call.data =="step2":
+        markup = InlineKeyboardMarkup()
+        step3_button = InlineKeyboardButton("step3", callback_data="step3")
+        cancel_button = InlineKeyboardButton("cancel", callback_data="cancel")
+        markup.add(step3_button,cancel_button)
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.id,text="choose your next step" ,reply_markup=markup)
+       # bot.answer_callback_query(call.id, "click on test",show_alert=True)
+    if call.data == "step3":
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.id,text="your reference code is 1312" )
+       # bot.send_message(call.message.chat.id,"Done")
+    if call.data == "cancel":
+        bot.answer_callback_query(call.id, "the mission has been canceled", show_alert=True)
+        bot.delete_message(chat_id=call.message.chat.id,message_id=call.message.id,timeout=5)
+
+@bot.message_handler(commands=['send_photo'])
+def send_photo(message):
+    photo = open('./test/file/test.jpg', 'rb')
+    bot.send_chat_action(message.chat.id, action="upload_photo")
+    bot.send_photo(message.chat.id, photo)
 # @bot.message_handler(func= lambda message : message.text == "Help")
 # def send_help(message):
 #     bot.send_message(message.chat.id, "It is your Help you want!")
