@@ -6,6 +6,7 @@ from telebot import apihelper
 import logging
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+from telebot.types import InlineQueryResultArticle, InputTextMessageContent
 # Dictionary to store user profiles
 user_profiles = {}
 
@@ -133,5 +134,21 @@ def get_id(message)    :
 # @bot.message_handler(func= lambda message : message.text == "About")
 # def send_about(message):
 #     bot.send_message(message.chat.id, "It is your About you want!")
+
+
+@bot.inline_handler(func= lambda query : True)
+def query_handler(query):
+    logger.info(query)
+    results= []
+    results.append(
+        InlineQueryResultArticle(
+            id='1',
+            title="This is a test",
+            input_message_content= InputTextMessageContent( message_text = " This is THE rESPONSE"),
+            description= "This is description"
+        )
+
+    )
+    bot.answer_inline_query(query.id,results,cache_time=0)
 
 bot.infinity_polling()
